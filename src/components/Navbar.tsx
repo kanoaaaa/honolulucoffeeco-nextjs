@@ -1,72 +1,58 @@
-/* eslint-disable react/jsx-indent, @typescript-eslint/indent */
-
 'use client';
 
-import { useSession } from 'next-auth/react';
-import { usePathname } from 'next/navigation';
-import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
-import { BoxArrowRight, Lock, PersonFill, PersonPlusFill } from 'react-bootstrap-icons';
+import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
+import Image from 'next/image'; // Import Next.js Image for optimization
+import logo from '/public/HC_Logo_Color.png.webp'; // Correct path to logo image
+import { Search, Person, Cart } from 'react-bootstrap-icons'; // Import icons
 
-const NavBar: React.FC = () => {
-  const { data: session } = useSession();
-  const currentUser = session?.user?.email;
-  const userWithRole = session?.user as { email: string; randomKey: string };
-  const role = userWithRole?.randomKey;
-  const pathName = usePathname();
-  return (
-    <Navbar bg="light" expand="lg">
-      <Container>
-        <Navbar.Brand href="/">Next.js Application Template</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto justify-content-start">
-            {currentUser
-              ? [
-                  <Nav.Link id="add-stuff-nav" href="/add" key="add" active={pathName === '/add'}>
-                    Add Stuff
-                  </Nav.Link>,
-                  <Nav.Link id="list-stuff-nav" href="/list" key="list" active={pathName === '/list'}>
-                    List Stuff
-                  </Nav.Link>,
-                ]
-              : ''}
-            {currentUser && role === 'ADMIN' ? (
-              <Nav.Link id="admin-stuff-nav" href="/admin" key="admin" active={pathName === '/admin'}>
-                Admin
-              </Nav.Link>
-            ) : (
-              ''
-            )}
-          </Nav>
-          <Nav>
-            {session ? (
-              <NavDropdown id="login-dropdown" title={currentUser}>
-                <NavDropdown.Item id="login-dropdown-sign-out" href="/api/auth/signout">
-                  <BoxArrowRight />
-                  Sign Out
-                </NavDropdown.Item>
-                <NavDropdown.Item id="login-dropdown-change-password" href="/auth/change-password">
-                  <Lock />
-                  Change Password
-                </NavDropdown.Item>
-              </NavDropdown>
-            ) : (
-              <NavDropdown id="login-dropdown" title="Login">
-                <NavDropdown.Item id="login-dropdown-sign-in" href="/auth/signin">
-                  <PersonFill />
-                  Sign in
-                </NavDropdown.Item>
-                <NavDropdown.Item id="login-dropdown-sign-up" href="/auth/signup">
-                  <PersonPlusFill />
-                  Sign up
-                </NavDropdown.Item>
-              </NavDropdown>
-            )}
-          </Nav>
-        </Navbar.Collapse>
+const NavBar = () => (
+  <>
+    {/* Top Navbar */}
+    <Navbar bg="light" className="justify-content-center">
+      <Container fluid>
+        <Navbar.Brand className="mx-auto">
+          <Image src={logo} alt="Honolulu Coffee" width={150} height={150} />
+        </Navbar.Brand>
+        <div className="d-flex justify-content-end">
+          <Nav.Link href="#" className="icon-spacing">
+            <Search />
+          </Nav.Link>
+          <Nav.Link href="#" className="icon-spacing">
+            <Person />
+          </Nav.Link>
+          <Nav.Link href="#" className="icon-spacing">
+            <Cart />
+          </Nav.Link>
+        </div>
       </Container>
     </Navbar>
-  );
-};
+
+    {/* Main Navbar */}
+    <Navbar expand="lg" bg="light" className="justify-content-center">
+      <Container>
+        <Nav className="mx-auto">
+          <NavDropdown title="Shop" id="shopDropdown">
+            <NavDropdown.Item href="#">All Coffee</NavDropdown.Item>
+            <NavDropdown.Item href="#">Coffee By Type</NavDropdown.Item>
+            <NavDropdown.Item href="#">Gourmet Food</NavDropdown.Item>
+            <NavDropdown.Item href="#">Merchandise</NavDropdown.Item>
+            <NavDropdown.Item href="#">Firepot Tea</NavDropdown.Item>
+            <NavDropdown.Item href="#">Gift Cards</NavDropdown.Item>
+          </NavDropdown>
+          <Nav.Link href="#">Subscriptions</Nav.Link>
+          <Nav.Link href="#">Locations</Nav.Link>
+          <NavDropdown title="Learn" id="learnDropdown">
+            <NavDropdown.Item href="#">Blog</NavDropdown.Item>
+            <NavDropdown.Item href="#">About Us</NavDropdown.Item>
+            <NavDropdown.Item href="#">Our Farm to Cup</NavDropdown.Item>
+            <NavDropdown.Item href="#">Wholesale</NavDropdown.Item>
+            <NavDropdown.Item href="#">Learn More About Kona</NavDropdown.Item>
+          </NavDropdown>
+          <Nav.Link href="#">Careers</Nav.Link>
+        </Nav>
+      </Container>
+    </Navbar>
+  </>
+);
 
 export default NavBar;
